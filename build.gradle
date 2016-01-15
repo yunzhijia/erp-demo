@@ -1,0 +1,53 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+sourceCompatibility = 1.6
+version = '1.0'
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Gradle Quickstart',
+                   'Implementation-Version': version
+    }
+}
+
+repositories {
+    repositories {
+    jcenter {
+        url "http://jcenter.bintray.com/"
+    }
+}
+}
+
+task fatJar(type: Jar) {
+	manifest {
+	        attributes 'Implementation-Title': 'Gradle Jar File Example',  
+        	'Implementation-Version': version,
+        	'Main-Class': 'test.Hello'
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+dependencies {
+ compile (
+ 	'com.alibaba:fastjson:1.1.37',
+	'com.mashape.unirest:unirest-java:1.4.7',
+ 	'commons-collections:commons-collections:3.2',
+	'commons-lang:commons-lang:2.5',
+	'ch.qos.logback:logback-classic:1.1.2',
+	'org.bouncycastle:bcprov-jdk15on:1.54',
+ )
+}
+
+test {
+    systemProperties 'property': 'value'
+}
+
+uploadArchives {
+    repositories {
+       flatDir {
+           dirs 'repos'
+       }
+    }
+}
